@@ -19,6 +19,17 @@ function createTeamRequest(team) {
   }).then((r) => r.json());
 }
 
+function deleteTeamRequest(id) {
+  //   DELETE teams-json/delete
+  return fetch("http://localhost:3000/teams-json/delete", {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ id }),
+  }).then((r) => r.json());
+}
+
 function getTeamAsHTML(team) {
   return `
     <tr>
@@ -26,7 +37,9 @@ function getTeamAsHTML(team) {
       <td>${team.members}</td>
       <td>${team.name}</td>
       <td>${team.url}</td>
-      <td></td>
+      <td>
+        <a data-id="${team.id}">✖️</a>
+      </td>
     </tr>`;
 }
 
@@ -41,14 +54,14 @@ function $(selector) {
 
 function formSubmit(e) {
   e.preventDefault();
-  const promotionValue = $("#promotion").value;
-  const membersValue = $("#members").value;
+  const promotion = $("#promotion").value;
+  const members = $("#members").value;
   const projectValue = $("#project").value;
   const urlValue = $("#url").value;
 
   const team = {
-    promotion: promotionValue,
-    members: membersValue,
+    promotion,
+    members,
     name: projectValue,
     url: urlValue,
   };
@@ -59,8 +72,22 @@ function formSubmit(e) {
   });
 }
 
+function deleteTeam(id) {
+  deleteTeamRequest(id).then((status) => {
+    if (status.success) {
+      window.location.reload();
+    }
+  });
+}
+
 function initEvents() {
   $("#editForm").addEventListener("submit", formSubmit);
+  $("tbody").addEventListener("click", (e) => {
+    if (e.target.matches("a")) {
+      const id = e.target.dataset.id;
+      deleteTeam(id);
+    }
+  });
 }
 
 const p = getTeamsRequest().then((teams) => {
