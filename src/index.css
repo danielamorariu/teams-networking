@@ -21,3 +21,18 @@ table tr {
 table tr:nth-child(even) {
   background-color: #f2f2f2;
 }
+
+.link-btn {
+  cursor: pointer;
+  color: #0096d6;
+  padding: 3px;
+  border: 1px solod gray;
+  border-radius: 3px;
+}
+
+.remove-btn:hover {
+  color: #b90303;
+}
+.edit-btn:hover {
+  color: #039903;
+}

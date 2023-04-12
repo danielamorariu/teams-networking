@@ -1,3 +1,5 @@
+let allTeams = [];
+
 function getTeamsRequest() {
   // GET teams-json
   return fetch("http://localhost:3000/teams-json", {
@@ -38,7 +40,8 @@ function getTeamAsHTML(team) {
       <td>${team.name}</td>
       <td>${team.url}</td>
       <td>
-        <a data-id="${team.id}">✖️</a>
+        <a data-id="${team.id}" class="link-btn remove-btn">✖️</a>
+        <a data-id="${team.id}" class="link-btn edit-btn">✎</a>
       </td>
     </tr>`;
 }
@@ -80,18 +83,31 @@ function deleteTeam(id) {
   });
 }
 
+function startEditTeam(id) {
+  const team = allTeams.find(team => team.id === id);
+
+  $("#promotion").value = team.promotion;
+  $("#members").value = team.members;
+  $("#project").value = team.name;
+  $("#url").value = team.url;
+}
+
 function initEvents() {
   $("#editForm").addEventListener("submit", formSubmit);
   $("tbody").addEventListener("click", e => {
-    if (e.target.matches("a")) {
+    if (e.target.matches("a.remove-btn")) {
       const id = e.target.dataset.id;
       deleteTeam(id);
+    } else if (e.target.matches("a.edit-btn")) {
+      const id = e.target.dataset.id;
+      startEditTeam(id);
     }
   });
 }
 
-console.warn("start app");
 const p = getTeamsRequest().then(teams => {
+  // window.teams = teams;
+  allTeams = teams;
   showTeams(teams);
 });
 
