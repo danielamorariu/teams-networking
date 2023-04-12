@@ -90,6 +90,7 @@ function initEvents() {
   });
 }
 
+console.warn("start app");
 const p = getTeamsRequest().then(teams => {
   showTeams(teams);
 });
