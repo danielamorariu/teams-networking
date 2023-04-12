@@ -1,4 +1,5 @@
 let allTeams = [];
+var editId;
 
 function getTeamsRequest() {
   // GET teams-json
@@ -29,6 +30,17 @@ function deleteTeamRequest(id) {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({ id })
+  }).then(r => r.json());
+}
+
+function updateTeamRequest(team) {
+  // PUT teams-json/update
+  return fetch("http://localhost:3000/teams-json/update", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(team)
   }).then(r => r.json());
 }
 
@@ -69,10 +81,24 @@ function formSubmit(e) {
     url: urlValue
   };
   // console.warn("submit ", e);
-  createTeamRequest(team).then(status => {
-    console.info("status", status);
-    window.location.reload();
-  });
+
+  if (editId) {
+    team.id = editId;
+    // console.log(team, editId);
+    updateTeamRequest(team).then(status => {
+      console.info("updated", status);
+      if (status.success) {
+        window.location.reload();
+      }
+    });
+  } else {
+    createTeamRequest(team).then(status => {
+      console.info("created", status);
+      if (status.success) {
+        window.location.reload();
+      }
+    });
+  }
 }
 
 function deleteTeam(id) {
@@ -84,6 +110,7 @@ function deleteTeam(id) {
 }
 
 function startEditTeam(id) {
+  editId = id;
   const team = allTeams.find(team => team.id === id);
 
   $("#promotion").value = team.promotion;
@@ -93,7 +120,12 @@ function startEditTeam(id) {
 }
 
 function initEvents() {
-  $("#editForm").addEventListener("submit", formSubmit);
+  const form = $("#editForm");
+  form.addEventListener("submit", formSubmit);
+  form.addEventListener("reset", () => {
+    editId = undefined;
+  });
+
   $("tbody").addEventListener("click", e => {
     if (e.target.matches("a.remove-btn")) {
       const id = e.target.dataset.id;

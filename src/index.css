@@ -25,8 +25,8 @@ table tr:nth-child(even) {
 .link-btn {
   cursor: pointer;
   color: #0096d6;
-  padding: 3px;
-  border: 1px solod gray;
+  padding: 5px 5px 2px 2px;
+  border: 1px solid gray;
   border-radius: 3px;
 }
 
