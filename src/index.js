@@ -99,8 +99,10 @@ function formSubmit(e) {
     updateTeamRequest(team).then(status => {
       // console.info("updated", status);
       if (status.success) {
-        loadTeams();
-        $("#editForm").reset();
+        loadTeams().then(() => {
+          $("#editForm").reset();
+        });
+
         // window.location.reload();
       }
     });
@@ -108,8 +110,10 @@ function formSubmit(e) {
     createTeamRequest(team).then(status => {
       // console.info("created", status);
       if (status.success) {
-        loadTeams();
-        $("#editForm").reset();
+        loadTeams(() => {
+          $("#editForm").reset();
+        });
+        // $("#editForm").reset();
         // window.location.reload();
       }
     });
@@ -173,11 +177,14 @@ function initEvents() {
     }
   });
 }
-function loadTeams() {
-  getTeamsRequest().then(teams => {
+function loadTeams(cb) {
+  return getTeamsRequest().then(teams => {
     // window.teams = teams;
     allTeams = teams;
     showTeams(teams);
+    if (typeof cb == "function") {
+      cb();
+    }
   });
 }
 
