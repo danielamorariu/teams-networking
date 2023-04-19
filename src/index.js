@@ -22,7 +22,9 @@ function createTeamRequest(team) {
   }).then(r => r.json());
 }
 
-function deleteTeamRequest(id) {
+function deleteTeamRequest(id, successDelete) {
+  console.info(successDelete);
+
   //   DELETE teams-json/delete
   return fetch("http://localhost:3000/teams-json/delete", {
     method: "DELETE",
@@ -30,7 +32,16 @@ function deleteTeamRequest(id) {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({ id })
-  }).then(r => r.json());
+  })
+    .then(r => r.json())
+    .then(status => {
+      console.warn("beefore removee", status);
+      if (typeof successDelete == "function") {
+        const r = successDelete(status);
+        console.info("raspuns", r);
+      }
+      return status;
+    });
 }
 
 function updateTeamRequest(team) {
@@ -102,7 +113,10 @@ function formSubmit(e) {
 }
 
 function deleteTeam(id) {
-  deleteTeamRequest(id).then(status => {
+  deleteTeamRequest(id, () => {
+    console.info("callback success");
+    return id;
+  }).then(status => {
     if (status.success) {
       window.location.reload();
     }
