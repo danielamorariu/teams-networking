@@ -119,9 +119,9 @@ function startEditTeam(id) {
   $("#url").value = team.url;
 }
 
-function searchTeams(search) {
+function searchTeams(teams, search) {
   search = search.toLowerCase();
-  return allTeams.filter(team => {
+  return teams.filter(team => {
     return (
       team.members.toLowerCase().includes(search) ||
       team.promotion.toLowerCase().includes(search) ||
@@ -139,12 +139,9 @@ function initEvents() {
   });
 
   $("#search").addEventListener("input", e => {
-    // const search = $("#search").value;
     const search = e.target.value;
-    const teams = searchTeams(search);
+    const teams = searchTeams(allTeams, search);
     showTeams(teams);
-    // console.table(teams);
-    // console.log("search", search, e);
   });
 
   $("tbody").addEventListener("click", e => {
