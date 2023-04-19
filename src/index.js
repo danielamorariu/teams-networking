@@ -23,7 +23,7 @@ function createTeamRequest(team) {
 }
 
 function deleteTeamRequest(id, successDelete) {
-  console.info(successDelete);
+  // console.info(successDelete);
 
   //   DELETE teams-json/delete
   return fetch("http://localhost:3000/teams-json/delete", {
@@ -35,10 +35,10 @@ function deleteTeamRequest(id, successDelete) {
   })
     .then(r => r.json())
     .then(status => {
-      console.warn("beefore removee", status);
+      // console.warn("beefore removee", status);
       if (typeof successDelete == "function") {
         const r = successDelete(status);
-        console.info("raspuns", r);
+        // console.info("raspuns", r);
       }
       return status;
     });
@@ -97,16 +97,20 @@ function formSubmit(e) {
     team.id = editId;
     // console.log(team, editId);
     updateTeamRequest(team).then(status => {
-      console.info("updated", status);
+      // console.info("updated", status);
       if (status.success) {
-        window.location.reload();
+        loadTeams();
+        $("#editForm").reset();
+        // window.location.reload();
       }
     });
   } else {
     createTeamRequest(team).then(status => {
-      console.info("created", status);
+      // console.info("created", status);
       if (status.success) {
-        window.location.reload();
+        loadTeams();
+        $("#editForm").reset();
+        // window.location.reload();
       }
     });
   }
@@ -114,11 +118,12 @@ function formSubmit(e) {
 
 function deleteTeam(id) {
   deleteTeamRequest(id, () => {
-    console.info("callback success");
+    // console.info("callback success");
     return id;
   }).then(status => {
     if (status.success) {
-      window.location.reload();
+      // window.location.reload();
+      loadTeams();
     }
   });
 }
@@ -168,11 +173,13 @@ function initEvents() {
     }
   });
 }
+function loadTeams() {
+  getTeamsRequest().then(teams => {
+    // window.teams = teams;
+    allTeams = teams;
+    showTeams(teams);
+  });
+}
 
-getTeamsRequest().then(teams => {
-  // window.teams = teams;
-  allTeams = teams;
-  showTeams(teams);
-});
-
+loadTeams();
 initEvents();
