@@ -69,11 +69,21 @@ function getTeamAsHTML(team) {
     </tr>`;
 }
 
-let previewDisplayedTeams;
+let previewDisplayedTeams = [];
 function showTeams(teams) {
   if (teams == previewDisplayedTeams) {
     console.info("same teams");
     return false;
+  }
+
+  if (teams.length === previewDisplayedTeams.length) {
+    var eqContent = teams.every((team, i) => team === previewDisplayedTeams[i]);
+    // console.warn("eq", eqContent, teams[0] === previewDisplayedTeams[0]);
+
+    if (eqContent) {
+      // console.warn("same content");
+      return;
+    }
   }
   previewDisplayedTeams = teams;
   const html = teams.map(getTeamAsHTML);
@@ -114,12 +124,20 @@ function formSubmit(e) {
         // });
 
         // v.3
-        allTeams = [...allTeams];
-        var oldTeam = allTeams.find(t => t.id === team.id);
-        oldTeam.promotion = team.promotion;
-        oldTeam.members = team.members;
-        oldTeam.name = team.name;
-        oldTeam.url = team.url;
+        // allTeams = [...allTeams];
+        // var oldTeam = allTeams.find(t => t.id === team.id);
+        // oldTeam.promotion = team.promotion;
+        // oldTeam.members = team.members;
+        // oldTeam.name = team.name;
+        // oldTeam.url = team.url;
+
+        allTeams = allTeams.map(t => {
+          if (t.id === team.id) {
+            return team;
+          }
+          return t;
+        });
+
         showTeams(allTeams);
         $("#editForm").reset();
       }
