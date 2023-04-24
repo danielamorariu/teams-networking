@@ -56,15 +56,23 @@ function updateTeamRequest(team) {
 }
 
 function getTeamAsHTML(team) {
+  const id = team.id;
+  const url = team.url;
+  let displayUrl = url;
+
+  if (url.startsWith("https://")) {
+    displayUrl = url.substring(8);
+  }
+
   return `
     <tr>
       <td>${team.promotion}</td>
       <td>${team.members}</td>
       <td>${team.name}</td>
-      <td>${team.url}</td>
+      <td><a href="${url}" target="_blank">${displayUrl}</a></td>
       <td>
-        <a data-id="${team.id}" class="link-btn remove-btn">✖️</a>
-        <a data-id="${team.id}" class="link-btn edit-btn">✎</a>
+        <a data-id="${id}" class="link-btn remove-btn">✖️</a>
+        <a data-id="${id}" class="link-btn edit-btn">✎</a>
       </td>
     </tr>`;
 }
