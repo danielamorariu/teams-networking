@@ -252,11 +252,17 @@ function sleep(ms) {
   });
 }
 
-(() => {
+(async () => {
   console.info("start");
-  sleep(3000).then(() => {
-    console.info("ready to do %o", "GO 🏎");
+
+  sleep(6000).then(() => {
+    console.info("ready to %o", "GO 🏎");
   });
+
+  console.warn("after sleep");
+
+  await sleep(5000);
+  console.info("await");
 })();
 
 // (function () {
