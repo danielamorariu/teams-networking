@@ -116,7 +116,7 @@ async function formSubmit(e) {
     name: projectValue,
     url: urlValue
   };
-  // console.warn("submit ", e);
+  let changes = false;
 
   if (editId) {
     team.id = editId;
@@ -132,19 +132,20 @@ async function formSubmit(e) {
         }
         return t;
       });
-
-      showTeams(allTeams);
-      $("#editForm").reset();
+      changes = true;
     }
   } else {
     const { success, id } = await createTeamRequest(team);
     if (success) {
       team.id = id;
-      // allTeams.push(team);
       allTeams = [...allTeams, team];
-      showTeams(allTeams);
-      $("#editForm").reset();
+      changes = true;
     }
+  }
+
+  showTeams(allTeams);
+  if (changes) {
+    $("#editForm").reset();
   }
 }
 
