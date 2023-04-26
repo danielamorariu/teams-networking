@@ -225,6 +225,11 @@ function sleep(ms) {
 }
 
 (async () => {
+  // Loading mask
+  $("#editForm").classList.add("loading-mask");
+  await loadTeams();
+  await sleep(2000);
+  $("#editForm").classList.remove("loading-mask");
   console.info("start");
 
   sleep(6000).then(() => {
@@ -241,5 +246,4 @@ function sleep(ms) {
 //   console.info("dddddd");
 // })();
 
-loadTeams();
 initEvents();
