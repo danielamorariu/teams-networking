@@ -252,9 +252,16 @@ function sleep(ms) {
   });
 }
 
-sleep(3000).then(() => {
-  console.info("ready to do %o js", "training");
-});
+(() => {
+  console.info("start");
+  sleep(3000).then(() => {
+    console.info("ready to do %o", "GO 🏎");
+  });
+})();
+
+// (function () {
+//   console.info("dddddd");
+// })();
 
 loadTeams();
 initEvents();
