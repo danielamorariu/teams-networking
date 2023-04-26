@@ -206,15 +206,15 @@ function initEvents() {
     }
   });
 }
-function loadTeams(cb) {
-  return getTeamsRequest().then(teams => {
-    // window.teams = teams;
-    allTeams = teams;
-    showTeams(teams);
-    if (typeof cb == "function") {
-      cb();
-    }
-  });
+async function loadTeams(cb) {
+  const teams = await getTeamsRequest();
+  // window.teams = teams;
+  allTeams = teams;
+  showTeams(teams);
+  if (typeof cb == "function") {
+    cb();
+  }
+  return teams;
 }
 function sleep(ms) {
   return new Promise(resolve => {
