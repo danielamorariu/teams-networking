@@ -1,5 +1,5 @@
 import { getTeamsRequest, updateTeamRequest, createTeamRequest, deleteTeamRequest } from "./requests";
-import { $, sleep } from "./utils";
+import { $, debounce, sleep } from "./utils";
 
 let allTeams = [];
 var editId;
@@ -144,11 +144,15 @@ function initEvents() {
     editId = undefined;
   });
 
-  $("#search").addEventListener("input", e => {
-    const search = e.target.value;
-    const teams = searchTeams(allTeams, search);
-    showTeams(teams);
-  });
+  $("#search").addEventListener(
+    "input",
+    debounce(function (e) {
+      const search = e.target.value;
+      console.info("search", search);
+      const teams = searchTeams(allTeams, search);
+      showTeams(teams);
+    }, 500)
+  );
 
   $("tbody").addEventListener("click", e => {
     if (e.target.matches("a.remove-btn")) {
@@ -179,16 +183,16 @@ async function loadTeams(cb) {
   await sleep(2000);
   $("#editForm").classList.remove("loading-mask");
 
-  console.info("start");
+  // console.info("start");
 
-  sleep(6000).then(() => {
-    console.info("ready to %o", "GO 🏎");
-  });
+  // sleep(6000).then(() => {
+  //   console.info("ready to %o", "GO 🏎");
+  // });
 
-  console.warn("after sleep");
+  // console.warn("after sleep");
 
-  await sleep(5000);
-  console.info("await");
+  // await sleep(5000);
+  // console.info("await");
 })();
 
 // (function () {
