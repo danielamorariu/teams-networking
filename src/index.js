@@ -1,59 +1,8 @@
+import { getTeamsRequest, updateTeamRequest, createTeamRequest, deleteTeamRequest } from "./requests";
+import { $, sleep } from "./utils";
+
 let allTeams = [];
 var editId;
-
-function getTeamsRequest() {
-  // GET teams-json
-  return fetch("http://localhost:3000/teams-json", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json"
-    }
-  }).then(r => r.json());
-}
-
-function createTeamRequest(team) {
-  // POST teams-json/create
-  return fetch("http://localhost:3000/teams-json/create", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(team)
-  }).then(r => r.json());
-}
-
-function deleteTeamRequest(id, successDelete) {
-  // console.info(successDelete);
-
-  //   DELETE teams-json/delete
-  return fetch("http://localhost:3000/teams-json/delete", {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ id })
-  })
-    .then(r => r.json())
-    .then(status => {
-      // console.warn("beefore removee", status);
-      if (typeof successDelete == "function") {
-        const r = successDelete(status);
-        // console.info("raspuns", r);
-      }
-      return status;
-    });
-}
-
-function updateTeamRequest(team) {
-  // PUT teams-json/update
-  return fetch("http://localhost:3000/teams-json/update", {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(team)
-  }).then(r => r.json());
-}
 
 function getTeamAsHTML({ id, url, promotion, members, name }) {
   // const id = team.id;
@@ -102,10 +51,6 @@ function showTeams(teams) {
 
 //To do remove - not global
 window.showTeams = showTeams;
-
-function $(selector) {
-  return document.querySelector(selector);
-}
 
 async function formSubmit(e) {
   e.preventDefault();
@@ -171,11 +116,11 @@ async function deleteTeam(id) {
   }
 }
 
-function startEditTeam(edit) {
-  editId = edit;
+function startEditTeam(id) {
+  editId = id;
   // const team = allTeams.find(team => team.id === id);
   // const { promotion, members, name, url } = team;
-  const team = allTeams.find(({ id }) => id === edit);
+  const team = allTeams.find(t => t.id === id);
 
   setFormValues(team);
 }
@@ -225,13 +170,6 @@ async function loadTeams(cb) {
     cb();
   }
   return teams;
-}
-function sleep(ms) {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve();
-    }, ms);
-  });
 }
 
 (async () => {
