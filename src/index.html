@@ -9,12 +9,14 @@
   </head>
   <body>
     <div style="padding: 0 0 5px 0">
+      <button id="removeSelected">✖ Remove selected</button>
       <input type="search" name="search" id="search" />
     </div>
 
     <form id="editForm" action="" method="post">
       <table>
         <colgroup>
+          <col span="1" style="width: 40px" />
           <col span="1" style="width: 125px" />
           <col span="1" />
           <col span="1" />
@@ -23,7 +25,8 @@
         </colgroup>
         <thead>
           <tr>
-            <th>Group</th>
+            <th><input type="checkbox" name="selectAll" id="selectAll" /></th>
+            <th>Promotions</th>
             <th>Members</th>
             <th>Project Name</th>
             <th>Project URL</th>
@@ -33,6 +36,7 @@
         <tbody></tbody>
         <tfoot>
           <tr>
+            <td></td>
             <td>
               <input type="text" name="promotion" id="promotion" placeholder="Enter promotion" required />
             </td>
@@ -47,7 +51,7 @@
             </td>
             <td>
               <button type="submit">💾</button>
-              <button type="rerset">✖️</button>
+              <button type="reset">✖️</button>
             </td>
           </tr>
         </tfoot>
