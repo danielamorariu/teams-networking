@@ -99,6 +99,8 @@ function showTeams(teams) {
   $("table tbody").innerHTML = html.join("");
   return true;
 }
+
+//To do remove - not global
 window.showTeams = showTeams;
 
 function $(selector) {
@@ -107,17 +109,9 @@ function $(selector) {
 
 async function formSubmit(e) {
   e.preventDefault();
-  const promotion = $("#promotion").value;
-  const members = $("#members").value;
-  const projectValue = $("#project").value;
-  const urlValue = $("#url").value;
 
-  const team = {
-    promotion,
-    members,
-    name: projectValue,
-    url: urlValue
-  };
+  // se creaza echipa cu noile valori
+  const team = getFormValues();
 
   if (editId) {
     team.id = editId;
@@ -142,11 +136,29 @@ async function formSubmit(e) {
     }
   }
 
-  // if (showTeams(allTeams)) {
-  //   $("#editForm").reset();
-  // }
-
   showTeams(allTeams) && $("#editForm").reset();
+}
+
+function getFormValues() {
+  const promotion = $("#promotion").value;
+  const members = $("#members").value;
+  const projectValue = $("#project").value;
+  const urlValue = $("#url").value;
+
+  const team = {
+    promotion,
+    members,
+    name: projectValue,
+    url: urlValue
+  };
+  return team;
+}
+
+function setFormValues({ promotion, members, name, url }) {
+  $("#promotion").value = promotion;
+  $("#members").value = members;
+  $("#project").value = name;
+  $("#url").value = url;
 }
 
 async function deleteTeam(id) {
@@ -163,12 +175,9 @@ function startEditTeam(edit) {
   editId = edit;
   // const team = allTeams.find(team => team.id === id);
   // const { promotion, members, name, url } = team;
-  const { promotion, members, name, url } = allTeams.find(({ id }) => id === edit);
+  const team = allTeams.find(({ id }) => id === edit);
 
-  $("#promotion").value = promotion;
-  $("#members").value = members;
-  $("#project").value = name;
-  $("#url").value = url;
+  setFormValues(team);
 }
 
 function searchTeams(teams, search) {
@@ -206,6 +215,7 @@ function initEvents() {
     }
   });
 }
+
 async function loadTeams(cb) {
   const teams = await getTeamsRequest();
   // window.teams = teams;
@@ -230,6 +240,7 @@ function sleep(ms) {
   await loadTeams();
   await sleep(2000);
   $("#editForm").classList.remove("loading-mask");
+
   console.info("start");
 
   sleep(6000).then(() => {
