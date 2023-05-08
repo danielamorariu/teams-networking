@@ -1,6 +1,9 @@
 export function $(selector) {
   return document.querySelector(selector);
 }
+export function $$(selector) {
+  return document.querySelectorAll(selector);
+}
 
 export function sleep(ms) {
   return new Promise(resolve => {

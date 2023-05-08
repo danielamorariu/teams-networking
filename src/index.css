@@ -42,6 +42,11 @@ input:not([type="image" i]) {
   color: #039903;
 }
 
+.table-tools {
+  display: flex;
+  justify-content: space-between;
+}
+
 /* loading mask */
 .loading-mask {
   position: relative;

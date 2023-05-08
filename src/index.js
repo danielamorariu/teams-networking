@@ -1,6 +1,6 @@
 // import debounce from "lodash/debounce";
 import { getTeamsRequest, updateTeamRequest, createTeamRequest, deleteTeamRequest } from "./requests";
-import { $, debounce, sleep } from "./utils";
+import { $, $$, debounce, sleep } from "./utils";
 
 let allTeams = [];
 var editId;
@@ -18,7 +18,7 @@ function getTeamAsHTML({ id, url, promotion, members, name }) {
   return `
     <tr>
       <td>
-        <input type="checkbox" name="selected" />
+        <input type="checkbox" name="selected" value="${id}" />
       </td>
       <td>${promotion}</td>
       <td>${members}</td>
@@ -141,13 +141,18 @@ function searchTeams(teams, search) {
   });
 }
 
-function removeSelected() {
-  console.log("removeSelected");
-  // TO DO
-  // find ids'
-  // add mask
-  // call remove deteleTeamRequest
-  // remove mask
+async function removeSelected() {
+  const checkboxes = $$("#editForm input[name=selected]:checked");
+  console.warn("removeSelected", checkboxes);
+  const ids = [...checkboxes].map(checkbox => checkbox.value);
+  console.warn("removeSelected ids", ids);
+  $("#editForm").classList.add("loading-mask");
+
+  const promises = ids.map(id => deleteTeamRequest(id));
+  const results = await Promise.allSettled(promises);
+
+  await loadTeams();
+  $("#editForm").classList.remove("loading-mask");
 }
 
 function initEvents() {
